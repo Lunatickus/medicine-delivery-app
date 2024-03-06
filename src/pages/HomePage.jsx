@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getMedicinesByShop } from "services/api";
 import { STORAGE_KEY } from "services/keys";
+import { toastError, toastSuccess } from "services/toastNotifications";
+import { HomePageStyled } from "./HomePage.styled";
+import { Loader } from "components/Loader/Loader";
 
 const HomePage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,13 +19,16 @@ const HomePage = () => {
   const [medicinesInCart, setMedicinesInCart] = useState(() => {
     return JSON.parse(window.localStorage.getItem(STORAGE_KEY)) ?? [];
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!shop) return;
 
     const fetchMedicines = async () => {
+      setIsLoading(true);
       const resp = await getMedicinesByShop(shop, filterByPrice, filterByDate);
       setMedicines([...resp]);
+      setIsLoading(false);
     };
     fetchMedicines();
   }, [shop, filterByPrice, filterByDate]);
@@ -57,22 +63,40 @@ const HomePage = () => {
 
   const handleAddToCart = (item) => {
     if (medicinesInCart.some((medicine) => medicine._id === item._id)) {
+      toastError(`${item.name} already added to cart`);
       return;
     }
-    setMedicinesInCart((prevState) => [...prevState, {...item, amount: 1}]);
+    setMedicinesInCart((prevState) => [...prevState, { ...item, amount: 1 }]);
+    toastSuccess(`${item.name} added to cart`);
+  };
+
+  const handleChangeFavorite = () => {
+    setMedicines([...medicines]);
   };
 
   return (
-    <main>
+    <HomePageStyled>
       <Shops onSelect={handleChangeShop} />
-      <Filters
-        changeFilter={handleChangeFilter}
-        priceFilter={filterByPrice}
-        dateFilter={filterByDate}
-        resetFilter={handleResetFilter}
-      />
-      <MedicinesHomeList medicines={medicines} addToCart={handleAddToCart} />
-    </main>
+      <div className="home-content-wrapper">
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <>
+            <Filters
+              changeFilter={handleChangeFilter}
+              priceFilter={filterByPrice}
+              dateFilter={filterByDate}
+              resetFilter={handleResetFilter}
+            />
+            <MedicinesHomeList
+              medicines={medicines}
+              addToCart={handleAddToCart}
+              addRemoveFavorite={handleChangeFavorite}
+            />
+          </>
+        )}
+      </div>
+    </HomePageStyled>
   );
 };
 

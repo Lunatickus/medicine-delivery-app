@@ -1,3 +1,5 @@
+import { FiltersFormStyled } from "./Filters.styled";
+
 export const Filters = ({
   changeFilter,
   priceFilter,
@@ -5,16 +7,28 @@ export const Filters = ({
   resetFilter,
 }) => {
   return (
-    <form>
+    <FiltersFormStyled>
       <label>
+        <input
+          type="radio"
+          onChange={changeFilter}
+          name="price"
+          checked={priceFilter}
+        />
         <span>Sort by price</span>
-        <input type="radio" onChange={changeFilter} name="price" checked={priceFilter} />
       </label>
       <label>
+        <input
+          type="radio"
+          onChange={changeFilter}
+          name="date"
+          checked={dateFilter}
+        />
         <span>Sort by date added</span>
-        <input type="radio" onChange={changeFilter} name="date" checked={dateFilter} />
       </label>
-      <button type="button" onClick={resetFilter}>Reset filter</button>
-    </form>
+      <button type="button" onClick={resetFilter}>
+        Reset filter
+      </button>
+    </FiltersFormStyled>
   );
 };
