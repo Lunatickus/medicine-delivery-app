@@ -57,6 +57,6 @@ The React Medicine Delivery app is built using the following technologies:
 
 Contributions to the React Medicine Delivery app are welcome! If you have any suggestions, feature requests, or bug reports, please open an issue on GitHub.
 
-## License
+## Back-end
 
-This project is licensed under the [MIT License](LICENSE).
+https://github.com/Lunatickus/medicine-delivery-app-back
