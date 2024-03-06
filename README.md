@@ -60,3 +60,7 @@ Contributions to the React Medicine Delivery app are welcome! If you have any su
 ## Back-end
 
 https://github.com/Lunatickus/medicine-delivery-app-back
+
+## Live Page
+
+https://lunatickus.github.io/medicine-delivery-app/
